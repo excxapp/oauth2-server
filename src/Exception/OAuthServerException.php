@@ -138,8 +138,8 @@ class OAuthServerException extends Exception
         $errorMessage = 'The request is missing a required parameter, includes an invalid parameter value, ' .
             'includes a parameter more than once, or is otherwise malformed.';
         $hint = ($hint === null) ? sprintf('Check the `%s` parameter', $parameter) : $hint;
-
-        return new static($errorMessage, 3, 'invalid_request', 400, $hint, null, $previous);
+        // var_dump($parameter, $hint);
+        return new static($hint, 3, 'invalid_request', 400, $hint, null, $previous);
     }
 
     /**
@@ -226,7 +226,7 @@ class OAuthServerException extends Exception
      */
     public static function invalidRefreshToken($hint = null, Throwable $previous = null)
     {
-        return new static('The refresh token is invalid.', 8, 'invalid_request', 401, $hint, null, $previous);
+        return new static($hint, 8, 'invalid_request', 401, $hint, null, $previous);
     }
 
     /**

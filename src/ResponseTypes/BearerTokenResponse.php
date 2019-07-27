@@ -58,9 +58,9 @@ class BearerTokenResponse extends AbstractResponseType
             ->withStatus(200)
             ->withHeader('pragma', 'no-cache')
             ->withHeader('cache-control', 'no-store')
-            ->withHeader('content-type', 'application/json; charset=UTF-8');
-
-        $response->getBody()->write($responseParams);
+            ->withHeader('content-type', 'application/json; charset=UTF-8')
+            ->withContent($responseParams);
+        // $response->getBody()->withContent($responseParams);
 
         return $response;
     }

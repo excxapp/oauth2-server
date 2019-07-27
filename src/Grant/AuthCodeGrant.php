@@ -208,10 +208,13 @@ class AuthCodeGrant extends AbstractAuthorizeGrant
         if (empty($authCodePayload->redirect_uri) === false && $redirectUri === null) {
             throw OAuthServerException::invalidRequest('redirect_uri');
         }
-
-        if ($authCodePayload->redirect_uri !== $redirectUri) {
+        
+        if(strpos($redirectUri, $authCodePayload->getRedirectUri()) === false){
             throw OAuthServerException::invalidRequest('redirect_uri', 'Invalid redirect URI');
         }
+        // if ($authCodePayload->redirect_uri !== $redirectUri) {
+        //     throw OAuthServerException::invalidRequest('redirect_uri', 'Invalid redirect URI');
+        // }
     }
 
     /**
@@ -341,7 +344,7 @@ class AuthCodeGrant extends AbstractAuthorizeGrant
                 $authorizationRequest->getRedirectUri(),
                 $authorizationRequest->getScopes()
             );
-
+            // var_dump($authCode->getRedirectUri());
             $payload = [
                 'client_id'             => $authCode->getClient()->getIdentifier(),
                 'redirect_uri'          => $authCode->getRedirectUri(),
@@ -354,7 +357,7 @@ class AuthCodeGrant extends AbstractAuthorizeGrant
             ];
 
             $jsonPayload = json_encode($payload);
-
+            // var_dump($jsonPayload);
             if ($jsonPayload === false) {
                 throw new LogicException('An error was encountered when JSON encoding the authorization request response');
             }

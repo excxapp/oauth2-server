@@ -181,7 +181,6 @@ abstract class AbstractGrant implements GrantTypeInterface
 
         if ($this->clientRepository->validateClient($clientId, $clientSecret, $this->getIdentifier()) === false) {
             $this->getEmitter()->emit(new RequestEvent(RequestEvent::CLIENT_AUTHENTICATION_FAILED, $request));
-
             throw OAuthServerException::invalidClient($request);
         }
 
@@ -262,8 +261,9 @@ abstract class AbstractGrant implements GrantTypeInterface
         ClientEntityInterface $client,
         ServerRequestInterface $request
     ) {
+        // var_dump($client->getRedirectUri());
         if (\is_string($client->getRedirectUri())
-            && (strcmp($client->getRedirectUri(), $redirectUri) !== 0)
+            && (strpos($redirectUri, $client->getRedirectUri()) === false)
         ) {
             $this->getEmitter()->emit(new RequestEvent(RequestEvent::CLIENT_AUTHENTICATION_FAILED, $request));
             throw OAuthServerException::invalidClient($request);
@@ -273,6 +273,19 @@ abstract class AbstractGrant implements GrantTypeInterface
             $this->getEmitter()->emit(new RequestEvent(RequestEvent::CLIENT_AUTHENTICATION_FAILED, $request));
             throw OAuthServerException::invalidClient($request);
         }
+        // if (\is_string($client->getRedirectUri())
+        //     && (strcmp($client->getRedirectUri(), $redirectUri) !== 0)
+        // ) {
+        //     $this->getEmitter()->emit(new RequestEvent(RequestEvent::CLIENT_AUTHENTICATION_FAILED, $request));
+        //     throw OAuthServerException::invalidClient($request);
+        // } elseif (\is_array($client->getRedirectUri())
+        //     && \in_array($redirectUri, $client->getRedirectUri(), true) === false
+        // ) {
+        //     $this->getEmitter()->emit(new RequestEvent(RequestEvent::CLIENT_AUTHENTICATION_FAILED, $request));
+        //     throw OAuthServerException::invalidClient($request);
+        // }
+
+
     }
 
     /**
